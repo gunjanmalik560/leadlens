@@ -1,0 +1,402 @@
+[
+  {
+    "id": 1,
+    "difficulty": "easy",
+    "question": "How many leads do we have in total?",
+    "pred_sql": "SELECT count(*) FROM leads;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 2,
+    "difficulty": "easy",
+    "question": "How many leads came from referrals?",
+    "pred_sql": "SELECT COUNT(*) FROM leads WHERE source = 'Referral';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 3,
+    "difficulty": "easy",
+    "question": "How many companies are in Bangalore?",
+    "pred_sql": "SELECT count(*) FROM companies WHERE city = 'Bangalore';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 4,
+    "difficulty": "easy",
+    "question": "How many deals have we lost?",
+    "pred_sql": "SELECT COUNT(*) \nFROM deals \nWHERE outcome = 'Lost';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 5,
+    "difficulty": "easy",
+    "question": "List the names of all sales reps in the South region.",
+    "pred_sql": "SELECT name FROM sales_reps WHERE region = 'South';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 6,
+    "difficulty": "easy",
+    "question": "How many contacts have no phone number?",
+    "pred_sql": "SELECT COUNT(*) FROM contacts WHERE phone IS NULL;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 7,
+    "difficulty": "easy",
+    "question": "What is the largest single won deal amount?",
+    "pred_sql": "SELECT MAX(amount) FROM deals WHERE outcome = 'Won';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 8,
+    "difficulty": "easy",
+    "question": "How many leads were created in 2026?",
+    "pred_sql": "SELECT count(*) FROM leads WHERE strftime('%Y', created_at) = '2026';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 9,
+    "difficulty": "easy",
+    "question": "How many campaigns ran on LinkedIn?",
+    "pred_sql": "SELECT count(*) FROM campaigns WHERE channel = 'LinkedIn';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 10,
+    "difficulty": "easy",
+    "question": "Which services do we offer? List each service once.",
+    "pred_sql": "SELECT DISTINCT service FROM leads ORDER BY service;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 11,
+    "difficulty": "easy",
+    "question": "How many leads are unassigned?",
+    "pred_sql": "SELECT COUNT(*) \nFROM leads \nWHERE rep_id IS NULL;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 12,
+    "difficulty": "easy",
+    "question": "How many companies are in the Fintech industry?",
+    "pred_sql": "SELECT count(*) FROM companies WHERE industry = 'Fintech';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 13,
+    "difficulty": "easy",
+    "question": "How many leads are currently in the Negotiation stage?",
+    "pred_sql": "SELECT COUNT(*) \nFROM leads \nWHERE status = 'Negotiation';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 14,
+    "difficulty": "easy",
+    "question": "What is the total budget of all campaigns?",
+    "pred_sql": "SELECT SUM(budget) FROM campaigns;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 15,
+    "difficulty": "easy",
+    "question": "How many contacts are Founders?",
+    "pred_sql": "SELECT count(*) FROM contacts WHERE job_title = 'Founder';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 16,
+    "difficulty": "medium",
+    "question": "What is the total revenue from won deals?",
+    "pred_sql": "SELECT SUM(amount) FROM deals WHERE outcome = 'Won';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 17,
+    "difficulty": "medium",
+    "question": "Which lead source has the highest win rate on closed deals?",
+    "pred_sql": "SELECT \n    l.source\nFROM leads l\nJOIN deals d ON l.lead_id = d.lead_id\nGROUP BY l.source\nORDER BY \n    CAST(SUM(CASE WHEN d.outcome = 'Won' THEN 1 ELSE 0 END) AS REAL) / COUNT(d.deal_id) DESC\nLIMIT 1;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 18,
+    "difficulty": "medium",
+    "question": "What is the average won deal amount for each service, rounded to the nearest rupee?",
+    "pred_sql": "SELECT \n    l.service,\n    ROUND(AVG(d.amount)) AS avg_amount\nFROM deals d\nJOIN leads l ON d.lead_id = l.lead_id\nWHERE d.outcome = 'Won'\nGROUP BY l.service;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 19,
+    "difficulty": "medium",
+    "question": "How many leads are there in each region, based on the company's region?",
+    "pred_sql": "SELECT \n    c.region, \n    COUNT(l.lead_id) AS lead_count\nFROM leads l\nJOIN contacts co ON l.contact_id = co.contact_id\nJOIN companies c ON co.company_id = c.company_id\nGROUP BY c.region;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 20,
+    "difficulty": "medium",
+    "question": "What is the most common reason for losing a deal?",
+    "pred_sql": "SELECT loss_reason \nFROM deals \nWHERE outcome = 'Lost' AND loss_reason IS NOT NULL \nGROUP BY loss_reason \nORDER BY COUNT(*) DESC \nLIMIT 1;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 21,
+    "difficulty": "medium",
+    "question": "Which 5 companies have the highest won revenue? Show the company name and revenue.",
+    "pred_sql": "SELECT c.name, SUM(d.amount) AS revenue\nFROM companies c\nJOIN contacts co ON c.company_id = co.company_id\nJOIN leads l ON co.contact_id = l.contact_id\nJOIN deals d ON l.lead_id = d.lead_id\nWHERE d.outcome = 'Won'\nGROUP BY c.company_id, c.name\nORDER BY revenue DESC\nLIMIT 5;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 22,
+    "difficulty": "medium",
+    "question": "What is the win rate (as a percentage, 1 decimal) for each industry?",
+    "pred_sql": "SELECT \n    c.industry,\n    ROUND(\n        SUM(CASE WHEN d.outcome = 'Won' THEN 1 ELSE 0 END) * 100.0 / COUNT(d.deal_id), \n        1\n    ) AS win_rate\nFROM companies c\nJOIN contacts co ON c.company_id = co.company_id\nJOIN leads l ON co.contact_id = l.contact_id\nJOIN deals d ON l.lead_id = d.lead_id\nGROUP BY c.industry\nORDER BY win_rate DESC;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 23,
+    "difficulty": "medium",
+    "question": "How many leads does each sales rep have? Include reps with zero leads.",
+    "pred_sql": "SELECT \n    r.rep_id,\n    r.name,\n    COUNT(l.lead_id) AS lead_count\nFROM sales_reps r\nLEFT JOIN leads l ON r.rep_id = l.rep_id\nGROUP BY r.rep_id, r.name;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 24,
+    "difficulty": "medium",
+    "question": "What is the total campaign budget for each channel?",
+    "pred_sql": "SELECT channel, SUM(budget) AS total_budget FROM campaigns GROUP BY channel;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 25,
+    "difficulty": "medium",
+    "question": "On average, how many days does it take to close a won deal, measured from lead creation? Round to 1 decimal.",
+    "pred_sql": "SELECT ROUND(AVG(julianday(d.closed_at) - julianday(l.created_at)), 1)\nFROM deals d\nJOIN leads l ON d.lead_id = l.lead_id\nWHERE d.outcome = 'Won';",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 26,
+    "difficulty": "medium",
+    "question": "How many activities of each type have been logged?",
+    "pred_sql": "SELECT activity_type, COUNT(*) AS activity_count FROM activities GROUP BY activity_type ORDER BY activity_count DESC;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 27,
+    "difficulty": "medium",
+    "question": "How many open leads (not Won or Lost) are there in each city?",
+    "pred_sql": "SELECT c.city, COUNT(l.lead_id) AS open_leads_count\nFROM leads l\nJOIN contacts ct ON l.contact_id = ct.contact_id\nJOIN companies c ON ct.company_id = c.company_id\nWHERE l.status NOT IN ('Won', 'Lost')\nGROUP BY c.city;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 28,
+    "difficulty": "medium",
+    "question": "What is the total won revenue for each year?",
+    "pred_sql": "SELECT \n    strftime('%Y', deals.closed_at) AS year,\n    SUM(deals.amount) AS total_won_revenue\nFROM deals\nWHERE deals.outcome = 'Won'\nGROUP BY strftime('%Y', deals.closed_at)\nORDER BY year;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 29,
+    "difficulty": "medium",
+    "question": "Which sales rep has won the most deals?",
+    "pred_sql": "SELECT sr.name\nFROM sales_reps sr\nJOIN leads l ON sr.rep_id = l.rep_id\nJOIN deals d ON l.lead_id = d.lead_id\nWHERE d.outcome = 'Won'\nGROUP BY sr.rep_id, sr.name\nORDER BY COUNT(d.deal_id) DESC\nLIMIT 1;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 30,
+    "difficulty": "medium",
+    "question": "How many leads came from each campaign? Show the campaign name and count.",
+    "pred_sql": "SELECT c.name, COUNT(l.lead_id) AS lead_count\nFROM campaigns c\nLEFT JOIN leads l ON c.campaign_id = l.campaign_id\nGROUP BY c.campaign_id, c.name;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 31,
+    "difficulty": "medium",
+    "question": "How many companies have more than one contact?",
+    "pred_sql": "SELECT COUNT(*) FROM (SELECT company_id FROM contacts GROUP BY company_id HAVING COUNT(*) > 1);",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 32,
+    "difficulty": "medium",
+    "question": "How many leads were created in each month of 2026?",
+    "pred_sql": "SELECT strftime('%Y-%m', created_at) AS month, COUNT(*) AS lead_count FROM leads WHERE strftime('%Y', created_at) = '2026' GROUP BY month ORDER BY month;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 33,
+    "difficulty": "medium",
+    "question": "What is the total won revenue for each region, based on the company's region?",
+    "pred_sql": "SELECT \n    c.region,\n    COALESCE(SUM(d.amount), 0) AS total_won_revenue\nFROM companies c\nJOIN contacts co ON c.company_id = co.company_id\nJOIN leads l ON co.contact_id = l.contact_id\nJOIN deals d ON l.lead_id = d.lead_id\nWHERE d.outcome = 'Won'\nGROUP BY c.region;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 34,
+    "difficulty": "medium",
+    "question": "Which month of 2025 had the most new leads?",
+    "pred_sql": "SELECT strftime('%Y-%m', created_at) AS month\nFROM leads\nWHERE strftime('%Y', created_at) = '2025'\nGROUP BY month\nORDER BY count(*) DESC\nLIMIT 1;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 35,
+    "difficulty": "medium",
+    "question": "How many contacts work at companies with more than 1000 employees?",
+    "pred_sql": "SELECT count(*) FROM contacts AS t1 INNER JOIN companies AS t2 ON t1.company_id = t2.company_id WHERE t2.employees > 1000;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 36,
+    "difficulty": "hard",
+    "question": "Who is the top sales rep by won revenue in each region?",
+    "pred_sql": "WITH rep_revenue AS (\n    SELECT \n        r.region,\n        r.rep_id,\n        r.name AS rep_name,\n        COALESCE(SUM(d.amount), 0) AS won_revenue,\n        ROW_NUMBER() OVER (PARTITION BY r.region ORDER BY COALESCE(SUM(d.amount), 0) DESC, r.rep_id ASC) AS rn\n    FROM sales_reps r\n    LEFT JOIN leads l ON r.rep_id = l.rep_id\n    LEFT JOIN deals d ON l.lead_id = d.lead_id AND d.outcome = 'Won'\n    GROUP BY r.region, r.rep_id, r.name\n)\nSELECT \n    region,\n    rep_name,\n    won_revenue\nFROM rep_revenue\nWHERE rn = 1\nORDER BY region;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 37,
+    "difficulty": "hard",
+    "question": "Show won revenue for each month of 2026 and the change from the previous month.",
+    "pred_sql": "SELECT \n    strftime('%Y-%m', d.closed_at) AS month,\n    SUM(d.amount) AS won_revenue,\n    SUM(d.amount) - LAG(SUM(d.amount)) OVER (ORDER BY strftime('%Y-%m', d.closed_at)) AS revenue_change\nFROM deals d\nWHERE d.outcome = 'Won' AND strftime('%Y', d.closed_at) = '2026'\nGROUP BY strftime('%Y-%m', d.closed_at)\nORDER BY month;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 38,
+    "difficulty": "hard",
+    "question": "Show the running total of won revenue by month in 2026.",
+    "pred_sql": null,
+    "status": "api_error",
+    "error": "Connection error."
+  },
+  {
+    "id": 39,
+    "difficulty": "hard",
+    "question": "List each sales rep together with their manager's name. Only include reps who have a manager.",
+    "pred_sql": "SELECT \n    r.name AS rep_name,\n    m.name AS manager_name\nFROM sales_reps r\nJOIN sales_reps m ON r.manager_id = m.rep_id\nWHERE r.manager_id IS NOT NULL;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 40,
+    "difficulty": "hard",
+    "question": "How many leads have no activities logged at all?",
+    "pred_sql": "SELECT count(*) FROM leads WHERE lead_id NOT IN (SELECT lead_id FROM activities);",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 41,
+    "difficulty": "hard",
+    "question": "What share of total won revenue does each service contribute, as a percentage with 1 decimal?",
+    "pred_sql": "SELECT \n    l.service,\n    ROUND(SUM(d.amount) * 100.0 / (SELECT SUM(amount) FROM deals WHERE outcome = 'Won'), 1) AS revenue_share_pct\nFROM deals d\nJOIN leads l ON d.lead_id = l.lead_id\nWHERE d.outcome = 'Won'\nGROUP BY l.service\nORDER BY revenue_share_pct DESC;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 42,
+    "difficulty": "hard",
+    "question": "Which sales reps have a higher win rate than their region's overall win rate (all closed deals handled by reps in that region)?",
+    "pred_sql": "WITH rep_deals AS (\n    SELECT \n        r.rep_id,\n        r.name AS rep_name,\n        r.region,\n        COUNT(d.deal_id) AS rep_total_deals,\n        SUM(CASE WHEN d.outcome = 'Won' THEN 1 ELSE 0 END) AS rep_won_deals\n    FROM sales_reps r\n    JOIN leads l ON r.rep_id = l.rep_id\n    JOIN deals d ON l.lead_id = d.lead_id\n    GROUP BY r.rep_id, r.name, r.region\n    HAVING COUNT(d.deal_id) > 0\n),\nregion_deals AS (\n    SELECT \n        r.region,\n        COUNT(d.deal_id) AS region_total_deals,\n        SUM(CASE WHEN d.outcome = 'Won' THEN 1 ELSE 0 END) AS region_won_deals\n    FROM sales_reps r\n    JOIN leads l ON r.rep_id = l.rep_id\n    JOIN deals d ON l.lead_id = d.lead_id\n    GROUP BY r.region\n    HAVING COUNT(d.deal_id) > 0\n)\nSELECT \n    rd.rep_name\nFROM rep_deals rd\nJOIN region_deals reg ON rd.region = reg.region\nWHERE (CAST(rd.rep_won_deals AS REAL) / rd.rep_total_deals) > (CAST(reg.region_won_deals AS REAL) / reg.region_total_deals)\nORDER BY rd.rep_name;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 43,
+    "difficulty": "hard",
+    "question": "Rank the industries by won revenue, showing the rank, industry and revenue.",
+    "pred_sql": "SELECT \n    RANK() OVER (ORDER BY SUM(d.amount) DESC) AS rank,\n    c.industry,\n    SUM(d.amount) AS revenue\nFROM companies c\nJOIN contacts ct ON c.company_id = ct.company_id\nJOIN leads l ON ct.contact_id = l.contact_id\nJOIN deals d ON l.lead_id = d.lead_id\nWHERE d.outcome = 'Won'\nGROUP BY c.industry;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 44,
+    "difficulty": "hard",
+    "question": "For each lead source, what is the average number of activities per closed lead? Round to 2 decimals.",
+    "pred_sql": "SELECT \n    l.source,\n    ROUND(CAST(COUNT(a.activity_id) AS REAL) / COUNT(DISTINCT l.lead_id), 2) AS avg_activities\nFROM leads l\nJOIN deals d ON l.lead_id = d.lead_id\nLEFT JOIN activities a ON l.lead_id = a.lead_id\nGROUP BY l.source;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 45,
+    "difficulty": "hard",
+    "question": "Which companies have both a won deal and a lost deal? Show the company names.",
+    "pred_sql": "SELECT c.name\nFROM companies c\nJOIN contacts ct ON c.company_id = ct.company_id\nJOIN leads l ON ct.contact_id = l.contact_id\nJOIN deals d ON l.lead_id = d.lead_id\nGROUP BY c.company_id, c.name\nHAVING SUM(CASE WHEN d.outcome = 'Won' THEN 1 ELSE 0 END) > 0\n   AND SUM(CASE WHEN d.outcome = 'Lost' THEN 1 ELSE 0 END) > 0;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 46,
+    "difficulty": "hard",
+    "question": "For each campaign, what is the won revenue divided by the campaign budget? Round to 2 decimals.",
+    "pred_sql": "SELECT \n    c.name,\n    ROUND(COALESCE(SUM(CASE WHEN d.outcome = 'Won' THEN d.amount ELSE 0 END), 0.0) / c.budget, 2) AS revenue_to_budget_ratio\nFROM campaigns c\nLEFT JOIN leads l ON c.campaign_id = l.campaign_id\nLEFT JOIN deals d ON l.lead_id = d.lead_id\nGROUP BY c.campaign_id, c.name, c.budget;",
+    "status": "wrong",
+    "error": null
+  },
+  {
+    "id": 47,
+    "difficulty": "hard",
+    "question": "What is the date of the most recent activity for each open lead in the Negotiation stage? Show lead id and date.",
+    "pred_sql": "SELECT l.lead_id, MAX(a.activity_date) AS activity_date\nFROM leads l\nJOIN activities a ON l.lead_id = a.lead_id\nWHERE l.status = 'Negotiation'\nGROUP BY l.lead_id;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 48,
+    "difficulty": "hard",
+    "question": "Which service had the biggest increase in won revenue from 2025 to 2026?",
+    "pred_sql": "SELECT l.service\nFROM leads l\nJOIN deals d ON l.lead_id = d.lead_id\nWHERE d.outcome = 'Won' AND strftime('%Y', d.closed_at) IN ('2025', '2026')\nGROUP BY l.service\nORDER BY (\n    SUM(CASE WHEN strftime('%Y', d.closed_at) = '2026' THEN d.amount ELSE 0 END) -\n    SUM(CASE WHEN strftime('%Y', d.closed_at) = '2025' THEN d.amount ELSE 0 END)\n) DESC\nLIMIT 1;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 49,
+    "difficulty": "hard",
+    "question": "For each company region, what percentage of leads are still open (not Won or Lost)? Show 1 decimal.",
+    "pred_sql": "SELECT \n    c.region,\n    ROUND(\n        100.0 * SUM(CASE WHEN l.status NOT IN ('Won', 'Lost') THEN 1 ELSE 0 END) / COUNT(l.lead_id), \n        1\n    ) AS open_percentage\nFROM companies c\nJOIN contacts co ON c.company_id = co.company_id\nJOIN leads l ON co.contact_id = l.contact_id\nGROUP BY c.region;",
+    "status": "correct",
+    "error": null
+  },
+  {
+    "id": 50,
+    "difficulty": "hard",
+    "question": "For each sales rep, what percentage of their won revenue came from Referral leads? Show 1 decimal.",
+    "pred_sql": "SELECT \n    r.name,\n    ROUND(\n        COALESCE(SUM(CASE WHEN l.source = 'Referral' AND d.outcome = 'Won' THEN d.amount END), 0.0) * 100.0 / \n        NULLIF(SUM(CASE WHEN d.outcome = 'Won' THEN d.amount END), 0),\n        1\n    ) AS referral_revenue_percentage\nFROM sales_reps r\nJOIN leads l ON r.rep_id = l.rep_id\nJOIN deals d ON l.lead_id = d.lead_id\nGROUP BY r.rep_id, r.name\nORDER BY r.name;",
+    "status": "correct",
+    "error": null
+  }
+]

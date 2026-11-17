@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "difficulty": "easy",
+    "question": "How many leads do we have in total?",
+    "sql": "SELECT COUNT(*) FROM leads;"
+  },
+  {
+    "id": 2,
+    "difficulty": "easy",
+    "question": "How many leads came from referrals?",
+    "sql": "SELECT COUNT(*) FROM leads WHERE source = 'Referral';"
+  },
+  {
+    "id": 3,
+    "difficulty": "easy",
+    "question": "How many companies are in Bangalore?",
+    "sql": "SELECT COUNT(*) FROM companies WHERE city = 'Bangalore';"
+  },
+  {
+    "id": 4,
+    "difficulty": "easy",
+    "question": "How many deals have we lost?",
+    "sql": "SELECT COUNT(*) FROM deals WHERE outcome = 'Lost';"
+  },
+  {
+    "id": 5,
+    "difficulty": "easy",
+    "question": "List the names of all sales reps in the South region.",
+    "sql": "SELECT name FROM sales_reps WHERE region = 'South';"
+  },
+  {
+    "id": 6,
+    "difficulty": "easy",
+    "question": "How many contacts have no phone number?",
+    "sql": "SELECT COUNT(*) FROM contacts WHERE phone IS NULL;"
+  },
+  {
+    "id": 7,
+    "difficulty": "easy",
+    "question": "What is the largest single won deal amount?",
+    "sql": "SELECT MAX(amount) FROM deals WHERE outcome = 'Won';"
+  },
+  {
+    "id": 8,
+    "difficulty": "easy",
+    "question": "How many leads were created in 2026?",
+    "sql": "SELECT COUNT(*) FROM leads WHERE strftime('%Y', created_at) = '2026';"
+  },
+  {
+    "id": 9,
+    "difficulty": "easy",
+    "question": "How many campaigns ran on LinkedIn?",
+    "sql": "SELECT COUNT(*) FROM campaigns WHERE channel = 'LinkedIn';"
+  },
+  {
+    "id": 10,
+    "difficulty": "easy",
+    "question": "Which services do we offer? List each service once.",
+    "sql": "SELECT DISTINCT service FROM leads;"
+  },
+  {
+    "id": 11,
+    "difficulty": "easy",
+    "question": "How many leads are unassigned?",
+    "sql": "SELECT COUNT(*) FROM leads WHERE rep_id IS NULL;"
+  },
+  {
+    "id": 12,
+    "difficulty": "easy",
+    "question": "How many companies are in the Fintech industry?",
+    "sql": "SELECT COUNT(*) FROM companies WHERE industry = 'Fintech';"
+  },
+  {
+    "id": 13,
+    "difficulty": "easy",
+    "question": "How many leads are currently in the Negotiation stage?",
+    "sql": "SELECT COUNT(*) FROM leads WHERE status = 'Negotiation';"
+  },
+  {
+    "id": 14,
+    "difficulty": "easy",
+    "question": "What is the total budget of all campaigns?",
+    "sql": "SELECT SUM(budget) FROM campaigns;"
+  },
+  {
+    "id": 15,
+    "difficulty": "easy",
+    "question": "How many contacts are Founders?",
+    "sql": "SELECT COUNT(*) FROM contacts WHERE job_title = 'Founder';"
+  },
+  {
+    "id": 16,
+    "difficulty": "medium",
+    "question": "What is the total revenue from won deals?",
+    "sql": "SELECT SUM(amount) FROM deals WHERE outcome = 'Won';"
+  },
+  {
+    "id": 17,
+    "difficulty": "medium",
+    "question": "Which lead source has the highest win rate on closed deals?",
+    "sql": "SELECT l.source FROM deals d JOIN leads l ON l.lead_id = d.lead_id GROUP BY l.source ORDER BY 1.0 * SUM(d.outcome = 'Won') / COUNT(*) DESC LIMIT 1;"
+  },
+  {
+    "id": 18,
+    "difficulty": "medium",
+    "question": "What is the average won deal amount for each service, rounded to the nearest rupee?",
+    "sql": "SELECT l.service, ROUND(AVG(d.amount)) FROM deals d JOIN leads l ON l.lead_id = d.lead_id WHERE d.outcome = 'Won' GROUP BY l.service;"
+  },
+  {
+    "id": 19,
+    "difficulty": "medium",
+    "question": "How many leads are there in each region, based on the company's region?",
+    "sql": "SELECT co.region, COUNT(*) FROM leads l JOIN contacts ct ON ct.contact_id = l.contact_id JOIN companies co ON co.company_id = ct.company_id GROUP BY co.region;"
+  },
+  {
+    "id": 20,
+    "difficulty": "medium",
+    "question": "What is the most common reason for losing a deal?",
+    "sql": "SELECT loss_reason FROM deals WHERE outcome = 'Lost' GROUP BY loss_reason ORDER BY COUNT(*) DESC LIMIT 1;"
+  },
+  {
+    "id": 21,
+    "difficulty": "medium",
+    "question": "Which 5 companies have the highest won revenue? Show the company name and revenue.",
+    "sql": "SELECT co.name, SUM(d.amount) AS revenue FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN contacts ct ON ct.contact_id = l.contact_id JOIN companies co ON co.company_id = ct.company_id WHERE d.outcome = 'Won' GROUP BY co.company_id ORDER BY revenue DESC LIMIT 5;"
+  },
+  {
+    "id": 22,
+    "difficulty": "medium",
+    "question": "What is the win rate (as a percentage, 1 decimal) for each industry?",
+    "sql": "SELECT co.industry, ROUND(100.0 * SUM(d.outcome = 'Won') / COUNT(*), 1) FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN contacts ct ON ct.contact_id = l.contact_id JOIN companies co ON co.company_id = ct.company_id GROUP BY co.industry;"
+  },
+  {
+    "id": 23,
+    "difficulty": "medium",
+    "question": "How many leads does each sales rep have? Include reps with zero leads.",
+    "sql": "SELECT r.name, COUNT(l.lead_id) FROM sales_reps r LEFT JOIN leads l ON l.rep_id = r.rep_id GROUP BY r.rep_id;"
+  },
+  {
+    "id": 24,
+    "difficulty": "medium",
+    "question": "What is the total campaign budget for each channel?",
+    "sql": "SELECT channel, SUM(budget) FROM campaigns GROUP BY channel;"
+  },
+  {
+    "id": 25,
+    "difficulty": "medium",
+    "question": "On average, how many days does it take to close a won deal, measured from lead creation? Round to 1 decimal.",
+    "sql": "SELECT ROUND(AVG(julianday(d.closed_at) - julianday(l.created_at)), 1) FROM deals d JOIN leads l ON l.lead_id = d.lead_id WHERE d.outcome = 'Won';"
+  },
+  {
+    "id": 26,
+    "difficulty": "medium",
+    "question": "How many activities of each type have been logged?",
+    "sql": "SELECT activity_type, COUNT(*) FROM activities GROUP BY activity_type;"
+  },
+  {
+    "id": 27,
+    "difficulty": "medium",
+    "question": "How many open leads (not Won or Lost) are there in each city?",
+    "sql": "SELECT co.city, COUNT(*) FROM leads l JOIN contacts ct ON ct.contact_id = l.contact_id JOIN companies co ON co.company_id = ct.company_id WHERE l.status NOT IN ('Won', 'Lost') GROUP BY co.city;"
+  },
+  {
+    "id": 28,
+    "difficulty": "medium",
+    "question": "What is the total won revenue for each year?",
+    "sql": "SELECT strftime('%Y', closed_at), SUM(amount) FROM deals WHERE outcome = 'Won' GROUP BY strftime('%Y', closed_at);"
+  },
+  {
+    "id": 29,
+    "difficulty": "medium",
+    "question": "Which sales rep has won the most deals?",
+    "sql": "SELECT r.name FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN sales_reps r ON r.rep_id = l.rep_id WHERE d.outcome = 'Won' GROUP BY r.rep_id ORDER BY COUNT(*) DESC LIMIT 1;"
+  },
+  {
+    "id": 30,
+    "difficulty": "medium",
+    "question": "How many leads came from each campaign? Show the campaign name and count.",
+    "sql": "SELECT c.name, COUNT(l.lead_id) FROM campaigns c JOIN leads l ON l.campaign_id = c.campaign_id GROUP BY c.campaign_id;"
+  },
+  {
+    "id": 31,
+    "difficulty": "medium",
+    "question": "How many companies have more than one contact?",
+    "sql": "SELECT COUNT(*) FROM (SELECT company_id FROM contacts GROUP BY company_id HAVING COUNT(*) > 1);"
+  },
+  {
+    "id": 32,
+    "difficulty": "medium",
+    "question": "How many leads were created in each month of 2026?",
+    "sql": "SELECT strftime('%Y-%m', created_at), COUNT(*) FROM leads WHERE strftime('%Y', created_at) = '2026' GROUP BY strftime('%Y-%m', created_at);"
+  },
+  {
+    "id": 33,
+    "difficulty": "medium",
+    "question": "What is the total won revenue for each region, based on the company's region?",
+    "sql": "SELECT co.region, SUM(d.amount) FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN contacts ct ON ct.contact_id = l.contact_id JOIN companies co ON co.company_id = ct.company_id WHERE d.outcome = 'Won' GROUP BY co.region;"
+  },
+  {
+    "id": 34,
+    "difficulty": "medium",
+    "question": "Which month of 2025 had the most new leads?",
+    "sql": "SELECT strftime('%Y-%m', created_at) FROM leads WHERE strftime('%Y', created_at) = '2025' GROUP BY strftime('%Y-%m', created_at) ORDER BY COUNT(*) DESC LIMIT 1;"
+  },
+  {
+    "id": 35,
+    "difficulty": "medium",
+    "question": "How many contacts work at companies with more than 1000 employees?",
+    "sql": "SELECT COUNT(*) FROM contacts ct JOIN companies co ON co.company_id = ct.company_id WHERE co.employees > 1000;"
+  },
+  {
+    "id": 36,
+    "difficulty": "hard",
+    "question": "Who is the top sales rep by won revenue in each region?",
+    "sql": "WITH rev AS (SELECT r.region, r.name, SUM(d.amount) AS won_revenue, RANK() OVER (PARTITION BY r.region ORDER BY SUM(d.amount) DESC) AS rnk FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN sales_reps r ON r.rep_id = l.rep_id WHERE d.outcome = 'Won' GROUP BY r.region, r.name) SELECT region, name, won_revenue FROM rev WHERE rnk = 1;"
+  },
+  {
+    "id": 37,
+    "difficulty": "hard",
+    "question": "Show won revenue for each month of 2026 and the change from the previous month.",
+    "sql": "WITH m AS (SELECT strftime('%Y-%m', closed_at) AS month, SUM(amount) AS rev FROM deals WHERE outcome = 'Won' AND strftime('%Y', closed_at) = '2026' GROUP BY month) SELECT month, rev, rev - LAG(rev) OVER (ORDER BY month) FROM m;"
+  },
+  {
+    "id": 38,
+    "difficulty": "hard",
+    "question": "Show the running total of won revenue by month in 2026.",
+    "sql": "WITH m AS (SELECT strftime('%Y-%m', closed_at) AS month, SUM(amount) AS rev FROM deals WHERE outcome = 'Won' AND strftime('%Y', closed_at) = '2026' GROUP BY month) SELECT month, SUM(rev) OVER (ORDER BY month) FROM m;"
+  },
+  {
+    "id": 39,
+    "difficulty": "hard",
+    "question": "List each sales rep together with their manager's name. Only include reps who have a manager.",
+    "sql": "SELECT r.name, m.name FROM sales_reps r JOIN sales_reps m ON m.rep_id = r.manager_id;"
+  },
+  {
+    "id": 40,
+    "difficulty": "hard",
+    "question": "How many leads have no activities logged at all?",
+    "sql": "SELECT COUNT(*) FROM leads l WHERE NOT EXISTS (SELECT 1 FROM activities a WHERE a.lead_id = l.lead_id);"
+  },
+  {
+    "id": 41,
+    "difficulty": "hard",
+    "question": "What share of total won revenue does each service contribute, as a percentage with 1 decimal?",
+    "sql": "SELECT l.service, ROUND(100.0 * SUM(d.amount) / (SELECT SUM(amount) FROM deals WHERE outcome = 'Won'), 1) FROM deals d JOIN leads l ON l.lead_id = d.lead_id WHERE d.outcome = 'Won' GROUP BY l.service;"
+  },
+  {
+    "id": 42,
+    "difficulty": "hard",
+    "question": "Which sales reps have a higher win rate than their region's overall win rate (all closed deals handled by reps in that region)?",
+    "sql": "WITH rep AS (SELECT r.rep_id, r.name, r.region, 1.0 * SUM(d.outcome = 'Won') / COUNT(*) AS wr FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN sales_reps r ON r.rep_id = l.rep_id GROUP BY r.rep_id), reg AS (SELECT r.region, 1.0 * SUM(d.outcome = 'Won') / COUNT(*) AS wr FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN sales_reps r ON r.rep_id = l.rep_id GROUP BY r.region) SELECT rep.name FROM rep JOIN reg ON reg.region = rep.region WHERE rep.wr > reg.wr;"
+  },
+  {
+    "id": 43,
+    "difficulty": "hard",
+    "question": "Rank the industries by won revenue, showing the rank, industry and revenue.",
+    "sql": "SELECT RANK() OVER (ORDER BY SUM(d.amount) DESC), co.industry, SUM(d.amount) FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN contacts ct ON ct.contact_id = l.contact_id JOIN companies co ON co.company_id = ct.company_id WHERE d.outcome = 'Won' GROUP BY co.industry;"
+  },
+  {
+    "id": 44,
+    "difficulty": "hard",
+    "question": "For each lead source, what is the average number of activities per closed lead? Round to 2 decimals.",
+    "sql": "WITH a AS (SELECT l.lead_id, l.source, COUNT(act.activity_id) AS n FROM leads l JOIN deals d ON d.lead_id = l.lead_id LEFT JOIN activities act ON act.lead_id = l.lead_id GROUP BY l.lead_id) SELECT source, ROUND(AVG(n), 2) FROM a GROUP BY source;"
+  },
+  {
+    "id": 45,
+    "difficulty": "hard",
+    "question": "Which companies have both a won deal and a lost deal? Show the company names.",
+    "sql": "SELECT co.name FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN contacts ct ON ct.contact_id = l.contact_id JOIN companies co ON co.company_id = ct.company_id GROUP BY co.company_id HAVING SUM(d.outcome = 'Won') > 0 AND SUM(d.outcome = 'Lost') > 0;"
+  },
+  {
+    "id": 46,
+    "difficulty": "hard",
+    "question": "For each campaign, what is the won revenue divided by the campaign budget? Round to 2 decimals.",
+    "sql": "SELECT c.name, ROUND(1.0 * COALESCE(SUM(CASE WHEN d.outcome = 'Won' THEN d.amount END), 0) / c.budget, 2) FROM campaigns c LEFT JOIN leads l ON l.campaign_id = c.campaign_id LEFT JOIN deals d ON d.lead_id = l.lead_id GROUP BY c.campaign_id;"
+  },
+  {
+    "id": 47,
+    "difficulty": "hard",
+    "question": "What is the date of the most recent activity for each open lead in the Negotiation stage? Show lead id and date.",
+    "sql": "SELECT l.lead_id, MAX(a.activity_date) FROM leads l JOIN activities a ON a.lead_id = l.lead_id WHERE l.status = 'Negotiation' GROUP BY l.lead_id;"
+  },
+  {
+    "id": 48,
+    "difficulty": "hard",
+    "question": "Which service had the biggest increase in won revenue from 2025 to 2026?",
+    "sql": "WITH y AS (SELECT l.service, SUM(CASE WHEN strftime('%Y', d.closed_at) = '2025' THEN d.amount ELSE 0 END) AS y25, SUM(CASE WHEN strftime('%Y', d.closed_at) = '2026' THEN d.amount ELSE 0 END) AS y26 FROM deals d JOIN leads l ON l.lead_id = d.lead_id WHERE d.outcome = 'Won' GROUP BY l.service) SELECT service FROM y ORDER BY y26 - y25 DESC LIMIT 1;"
+  },
+  {
+    "id": 49,
+    "difficulty": "hard",
+    "question": "For each company region, what percentage of leads are still open (not Won or Lost)? Show 1 decimal.",
+    "sql": "SELECT co.region, ROUND(100.0 * SUM(l.status NOT IN ('Won', 'Lost')) / COUNT(*), 1) FROM leads l JOIN contacts ct ON ct.contact_id = l.contact_id JOIN companies co ON co.company_id = ct.company_id GROUP BY co.region;"
+  },
+  {
+    "id": 50,
+    "difficulty": "hard",
+    "question": "For each sales rep, what percentage of their won revenue came from Referral leads? Show 1 decimal.",
+    "sql": "SELECT r.name, ROUND(100.0 * SUM(CASE WHEN l.source = 'Referral' THEN d.amount ELSE 0 END) / SUM(d.amount), 1) FROM deals d JOIN leads l ON l.lead_id = d.lead_id JOIN sales_reps r ON r.rep_id = l.rep_id WHERE d.outcome = 'Won' GROUP BY r.rep_id;"
+  }
+]
