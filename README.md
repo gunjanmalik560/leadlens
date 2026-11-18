@@ -77,6 +77,7 @@ Deciding what "the same answer" means took some thought:
 |---|---|---|---|---|
 | v1: schema + business rules | 15/15 | 20/20 | 13/15 | **48/50 (96%)** |
 | v2: + integer-division rule | 15/15 | 20/20 | 15/15 | **50/50 (100%)** |
+| v3 (deployed): + show the value behind "top" answers, readable column names | 15/15 | 20/20 | 15/15 | **50/50 (100%)** |
 
 Model: `gemini-3.5-flash-lite`. Full per-question results are in [`results/`](results/),
 and the v1 failure report is in [`eval_report_v1.md`](eval_report_v1.md).
