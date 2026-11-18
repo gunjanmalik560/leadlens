@@ -6,6 +6,13 @@ LeadLens turns a business question like *"Which lead source has the highest win 
 into SQL, runs it on a sales CRM database, and returns the answer as a number,
 table or chart, along with the SQL it used so the result can be checked.
 
+![Revenue by industry: bar chart and table](images/answer-bar-chart.png)
+
+<table><tr>
+<td><img src="images/monthly-line-chart.png" alt="Monthly won revenue line chart"></td>
+<td><img src="images/sql-shown.png" alt="Answer with the SQL used"></td>
+</tr></table>
+
 Unlike most text-to-SQL demos, it is **measured**: a 50-question test set with
 hand-checked answers scores every version of the prompt, so improvements are
 proven rather than assumed.
